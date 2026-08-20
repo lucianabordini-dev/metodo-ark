@@ -18,18 +18,18 @@ const c = {
   dim: (m) => console.log(`\x1b[2m${m}\x1b[0m`),
 };
 
-const ALVOS = {
+const GLOBAIS = {
   claude: { dir: () => join(homedir(), ".claude", "skills"), nome: "Claude Code / Desktop" },
   codex: { dir: () => join(homedir(), ".codex", "skills"), nome: "Codex CLI" },
-  cursor: { dir: () => join(process.cwd(), ".cursor", "skills"), nome: "Cursor (projeto)" },
-  projeto: { dir: () => join(process.cwd(), ".agents", "skills"), nome: "Projeto (.agents/skills)" },
+  cursor: { dir: () => join(homedir(), ".cursor", "skills"), nome: "Cursor" },
 };
 
 function args(argv) {
-  const o = { _: [], agente: null, force: false };
+  const o = { _: [], agente: null, force: false, projeto: false };
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
     if (a === "--agent" || a === "-a") o.agente = argv[++i];
+    else if (a === "--project" || a === "--projeto" || a === "-p") o.projeto = true;
     else if (a === "--force" || a === "-f") o.force = true;
     else if (a === "--help" || a === "-h") o.help = true;
     else if (!a.startsWith("-")) o._.push(a);
@@ -37,23 +37,33 @@ function args(argv) {
   return o;
 }
 
-function instalar(chave, force) {
-  const alvo = ALVOS[chave];
-  if (!alvo) {
-    c.err(`agente desconhecido: ${chave} — use ${Object.keys(ALVOS).join(", ")} ou all`);
-    process.exit(1);
-  }
-  const base = alvo.dir();
+function copiar(base, nome, force) {
   const dest = join(base, "metodo-ark");
   if (existsSync(dest) && !force) {
-    c.skip(`${alvo.nome} já tem metodo-ark — use --force para sobrescrever`);
+    c.skip(`${nome} já tem metodo-ark — use --force para atualizar`);
     return false;
   }
   mkdirSync(base, { recursive: true });
   if (force && existsSync(dest)) rmSync(dest, { recursive: true, force: true });
   cpSync(SKILL, dest, { recursive: true });
-  c.ok(`${alvo.nome} → ${dest}`);
+  c.ok(`${nome} → ${dest}`);
   return true;
+}
+
+function instalarGlobal(chaves, force) {
+  for (const k of chaves) {
+    const alvo = GLOBAIS[k];
+    if (!alvo) {
+      c.err(`agente desconhecido: ${k} — use ${Object.keys(GLOBAIS).join(", ")}`);
+      process.exit(1);
+    }
+    copiar(alvo.dir(), alvo.nome, force);
+  }
+}
+
+function instalarProjeto(raiz, force) {
+  copiar(join(raiz, ".agents", "skills"), "Projeto (.agents/skills — versionado)", force);
+  espelho(raiz, true);
 }
 
 function harness(raiz) {
@@ -95,7 +105,7 @@ function harness(raiz) {
   c.dim("  sim → Extração (Fundação é o 1º doc) · não → Descoberta (antes vem o MVP Scope)");
 }
 
-function espelho(raiz) {
+function espelho(raiz, quieto = false) {
   const src = join(raiz, ".agents", "skills");
   if (!existsSync(src)) { c.err(`não achei ${src} — rode 'harness' primeiro`); process.exit(1); }
   const destBase = join(raiz, ".claude", "skills");
@@ -109,6 +119,7 @@ function espelho(raiz) {
     n++;
   }
   if (!n) c.skip("nada a espelhar");
+  if (quieto) return;
   console.log();
   c.dim("O espelho é artefato local — não versione. Adicione .claude/ ao .gitignore.");
   c.dim("Em Windows, symlink versionado só sobrevive ao clone com core.symlinks=true");
@@ -120,21 +131,24 @@ function ajuda() {
   console.log(`
 \x1b[1mmetodo-ark\x1b[0m — construir software profissional com IA sem terceirizar o pensamento
 
-  npx metodo-ark install [--agent <alvo>] [--force]
+  npx metodo-ark install [--agent <nome>] [--project] [--force]
   npx metodo-ark harness [caminho]      monta .specs/ e .agents/ no projeto
   npx metodo-ark mirror  [caminho]      espelha .agents/skills em .claude/skills
 
-Alvos de instalação:
-  claude    ~/.claude/skills/          (padrão) Claude Code e Desktop
-  codex     ~/.codex/skills/           Codex CLI
-  cursor    <projeto>/.cursor/skills/  Cursor
-  projeto   <projeto>/.agents/skills/  qualquer agente, versionado com o repo
-  all       claude + codex
+Instalação global (padrão) — vale em todos os seus projetos:
+  ~/.claude/skills/    Claude Code e Claude Desktop
+  ~/.codex/skills/     Codex CLI
+  ~/.cursor/skills/    Cursor
 
-Exemplos:
-  npx metodo-ark install
-  npx metodo-ark install --agent projeto
-  npx metodo-ark harness . && npx metodo-ark mirror .
+  npx metodo-ark install                  os três de uma vez
+  npx metodo-ark install --agent codex    só um deles
+  npx metodo-ark install --force          atualiza para a versão nova
+
+Instalação por projeto — versionada, o time inteiro pega no git pull:
+  npx metodo-ark install --project        .agents/skills/ + espelho .claude/skills
+
+Montar o harness:
+  npx metodo-ark harness .
 `);
 }
 
@@ -145,9 +159,11 @@ if (o.help) { ajuda(); process.exit(0); }
 
 switch (cmd) {
   case "install": {
-    const alvo = o.agente || "claude";
-    if (alvo === "all") { instalar("claude", o.force); instalar("codex", o.force); }
-    else instalar(alvo, o.force);
+    if (o.projeto) {
+      instalarProjeto(resolve(o._[1] || "."), o.force);
+    } else {
+      instalarGlobal(o.agente ? [o.agente] : Object.keys(GLOBAIS), o.force);
+    }
     console.log();
     c.dim("Pronto. Peça ao agente: \"usando o Método Ark, monta o harness deste projeto\"");
     break;
