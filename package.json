@@ -1,0 +1,14 @@
+{
+  "name": "metodo-ark",
+  "version": "3.0.0",
+  "description": "Método Ark — construir software profissional com IA sem terceirizar o pensamento. Agent Skill para Claude Code, Codex, Cursor e qualquer agente que leia o padrão SKILL.md.",
+  "keywords": ["agent-skill", "claude-code", "codex", "cursor", "spec-driven", "ai-agents", "metodo-ark"],
+  "type": "module",
+  "bin": { "metodo-ark": "bin/cli.mjs" },
+  "files": ["bin", "skills", "README.md", "LICENSE"],
+  "engines": { "node": ">=18" },
+  "license": "MIT",
+  "author": "Luciana Bordini",
+  "repository": { "type": "git", "url": "git+https://github.com/lucianabordini-dev/metodo-ark.git" },
+  "homepage": "https://github.com/lucianabordini-dev/metodo-ark#readme"
+}

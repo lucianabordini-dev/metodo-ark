@@ -22,13 +22,31 @@ O Método Ark resolve registrando a intenção **antes** — porque só dá para
 ## Instalação
 
 ```bash
-# projeto (o time inteiro pega no git pull)
-git clone https://github.com/<user>/metodo-ark.git /tmp/ma
-cp -R /tmp/ma/skills/metodo-ark .agents/skills/
+npx metodo-ark install
+```
 
-# global (todos os seus projetos)
-cp -R /tmp/ma/skills/metodo-ark ~/.claude/skills/     # Claude Code / Desktop
-cp -R /tmp/ma/skills/metodo-ark ~/.codex/skills/      # Codex CLI
+Instala em `~/.claude/skills/`. Outros alvos:
+
+```bash
+npx metodo-ark install --agent codex      # ~/.codex/skills/
+npx metodo-ark install --agent cursor     # <projeto>/.cursor/skills/
+npx metodo-ark install --agent projeto    # <projeto>/.agents/skills/ — versionado, o time inteiro pega no git pull
+npx metodo-ark install --agent all        # claude + codex
+```
+
+Montar o harness num projeto:
+
+```bash
+npx metodo-ark harness .    # cria .specs/, .agents/, AGENTS.md e CLAUDE.md
+npx metodo-ark mirror .     # espelha .agents/skills em .claude/skills por symlink
+```
+
+<details>
+<summary>Instalar na mão, sem npm</summary>
+
+```bash
+git clone https://github.com/lucianabordini-dev/metodo-ark.git /tmp/ma
+cp -R /tmp/ma/skills/metodo-ark ~/.claude/skills/
 ```
 
 | Agente | Destino |
@@ -38,16 +56,11 @@ cp -R /tmp/ma/skills/metodo-ark ~/.codex/skills/      # Codex CLI
 | Cursor | `<projeto>/.cursor/skills/metodo-ark/` |
 | Projeto (qualquer agente) | `<projeto>/.agents/skills/metodo-ark/` |
 
-> O erro mais comum é aninhar um nível a mais. O `SKILL.md` fica em `.../skills/metodo-ark/SKILL.md`.
+O erro mais comum é aninhar um nível a mais. O `SKILL.md` fica em `.../skills/metodo-ark/SKILL.md`.
 
-Usando Claude Code num projeto que já tem `.agents/skills/`, espelhe por symlink em vez de duplicar:
+</details>
 
-```bash
-mkdir -p .claude/skills
-ln -s ../../.agents/skills/metodo-ark .claude/skills/metodo-ark
-```
-
-O espelho é local — não versione. Em Windows, symlink versionado só sobrevive ao clone com `core.symlinks=true` e Developer Mode; sem isso o Git materializa o link como arquivo de texto e o agente lê uma linha achando que é a skill, sem dar erro.
+O espelho em `.claude/` é artefato local — não versione. Em Windows, symlink versionado só sobrevive ao clone com `core.symlinks=true` e Developer Mode; sem isso o Git materializa o link como arquivo de texto e o agente lê uma linha achando que é a skill, sem dar erro.
 
 ---
 
