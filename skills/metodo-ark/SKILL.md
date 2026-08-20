@@ -1,6 +1,6 @@
 ---
 name: metodo-ark
-description: Método Ark — construir software profissional com IA sem terceirizar o pensamento. Duas altitudes (produto e iniciativa), duas portas de entrada (Descoberta e Extração), regras de negócio tipadas como semente da arquitetura, harness em .specs/, e validação independente com evidência (autor ≠ verificador, sensor de discriminação). Use para (1) decidir se e o que construir, (2) escrever Fundação, MVP Scope, PRD, Domain Model ou Base Técnica, (3) extrair e tipar regras de negócio, (4) montar o harness de um repositório, (5) escrever spec de feature, arquitetura, tasks e validação. Ativa em "Método Ark", "duas altitudes", "porta de descoberta", "porta de extração", "Fundação", "MVP Scope", "PRD", "domain model", "base técnica", "regras de negócio", "invariante", "harness", "matriz de cenário", "spec-as-source", "validação independente", "evidência". NÃO use para escrever código sem spec, nem para decisão de produto sem software envolvido.
+description: Método Ark — construir software profissional com IA sem terceirizar o pensamento. Duas altitudes (produto e iniciativa), duas portas de entrada (Descoberta e Extração), regras de negócio tipadas como semente da arquitetura, harness do projeto em .specs/, e validação independente com evidência (autor ≠ verificador, sensor de discriminação). Use para (1) decidir se e o que construir, (2) escrever Fundação, MVP Scope, PRD, Domain Model ou Base Técnica, (3) extrair e tipar regras de negócio, (4) montar o harness do projeto num repositório, (5) escrever spec de feature, arquitetura, tasks e validação. Ativa em "Método Ark", "duas altitudes", "porta de descoberta", "porta de extração", "Fundação", "MVP Scope", "PRD", "domain model", "base técnica", "regras de negócio", "invariante", "harness do projeto", "matriz de cenário", "spec-as-source", "validação independente", "evidência". NÃO use para escrever código sem spec, nem para decisão de produto sem software envolvido.
 license: MIT
 metadata:
   author: Luciana Bordini
@@ -83,7 +83,7 @@ Carregar sob demanda, nunca todas de uma vez.
 |---|---|
 | [`references/tese-e-metodo.md`](references/tese-e-metodo.md) | O método completo: tese, altitudes, portas, ciclo, matriz de cenário, validação. Ler quando a tarefa envolve decidir o que fazer, não como. |
 | [`references/regras-de-negocio.md`](references/regras-de-negocio.md) | Ao extrair, ouvir, escrever ou tipar regra de negócio. Ler sempre que estiver escrevendo Fundação ou PRD. |
-| [`references/harness.md`](references/harness.md) | Ao montar ou alterar `.agents/`, `.specs/` e `AGENTS.md`. |
+| [`references/harness.md`](references/harness.md) | Ao montar ou alterar o harness do projeto — `.agents/`, `.specs/` e `AGENTS.md`. |
 
 ---
 
@@ -156,9 +156,19 @@ Nunca conta: relato do agente sobre o próprio trabalho; "gate verde" sem comand
 
 ---
 
-## `.specs/` — a estrutura que esta skill cria
+## O harness do projeto — a estrutura que esta skill cria
 
-O harness vive no projeto de quem usa a skill, não aqui.
+> **"Harness do projeto" — e por que a qualificação importa.** No vocabulário do mercado, *harness* é a infraestrutura em volta do modelo que o transforma em agente: execução de ferramentas, memória, estado, loops de feedback. Nesse sentido, **o harness é o Claude Code, o Codex, o Cursor** — a própria documentação do Claude Code se descreve assim.
+>
+> O que o Método Ark monta é outra camada, e por isso ela sempre leva sobrenome: **harness do projeto** (ou *harness Ark*). É a estrutura dentro do repositório que faz aquele harness genérico se comportar de um jeito específico aqui:
+>
+> - **o que a IA sabe fazer** (`.agents/skills/`)
+> - **o que é verdade neste projeto** (`.specs/memory/`)
+> - **o que ela precisa provar** (`.specs/rules/`, os gates, a validação)
+>
+> Nunca diga "o harness" sozinho: quem é técnico vai entender a ferramenta, não a estrutura.
+
+Ele vive no projeto de quem usa a skill, não aqui.
 
 ```
 .agents/skills/            skills do projeto (fonte da verdade, portátil)
@@ -182,7 +192,7 @@ CLAUDE.md                  stub que importa AGENTS.md
 
 **Cada regra mora num lugar só.** Regra de código em `AGENTS.md`; regra de método em `.specs/rules/`.
 
-### Montando o harness num projeto
+### Montando o harness do projeto
 
 Copiar de `templates/` desta skill para o projeto:
 

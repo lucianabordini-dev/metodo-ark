@@ -1,6 +1,6 @@
 {
   "name": "metodo-ark",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "description": "Método Ark — construir software profissional com IA sem terceirizar o pensamento. Agent Skill para Claude Code, Codex, Cursor e qualquer agente que leia o padrão SKILL.md.",
   "keywords": [
     "agent-skill",

@@ -76,7 +76,7 @@ Instala em `.agents/skills/metodo-ark/` (convenção aberta, lida por Cursor e p
 
 **Escolha um dos dois e mantenha.** Global e por projeto funcionam juntos, mas quando a global for a 3.1 e a do projeto a 3.0, você não percebe pelo comportamento — percebe por uma regra que sumiu.
 
-### Montar o harness num projeto
+### Montar o harness do projeto
 
 ```bash
 npx metodo-ark harness .     # cria .specs/, .agents/, AGENTS.md e CLAUDE.md

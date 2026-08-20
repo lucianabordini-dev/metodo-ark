@@ -39,7 +39,7 @@ O erro mais comum ao aplicar o método é tratar tudo como uma sequência só. N
 | **Nível Produto** | Uma vez por produto (e revisões raras) | Os documentos de origem + o harness |
 | **Nível Iniciativa** | Toda vez que existe trabalho a fazer | Uma feature, um fix, um refactor, uma resposta |
 
-O harness (`AGENTS.md` + `.specs/`) liga as duas: é onde o nível produto deposita conhecimento e onde o nível iniciativa vai buscá-lo.
+O harness do projeto (`AGENTS.md` + `.specs/`) liga as duas: é onde o nível produto deposita conhecimento e onde o nível iniciativa vai buscá-lo.
 
 **Regra de altitude:** antes de qualquer coisa, identificar em qual altitude a tarefa está. Aplicar artefato de produto a uma feature pequena é o erro que faz o método parecer pesado. Pular para a spec de feature sem produto definido é o erro que gera software sem direção.
 
@@ -96,7 +96,11 @@ A Fundação **não pode matar nada**, porque quando ela é escrita a decisão d
 
 📘 **Como caçar, escrever e tipar uma regra: [`regras-de-negocio.md`](./regras-de-negocio.md).** É o pilar menos óbvio e mais valioso do método.
 
-📘 **Como montar o harness: [`harness.md`](./harness.md).**
+📘 **Como montar o harness do projeto: [`harness.md`](./harness.md).**
+
+> **Harness do projeto** é a estrutura no repositório que dirige a execução da IA: **o que ela sabe fazer** (`.agents/`), **o que é verdade aqui** (`.specs/memory/`) e **o que ela precisa provar** (`.specs/features/` e as regras).
+>
+> Sempre com o qualificador — *harness do projeto* ou *harness Ark*, nunca "o harness" sozinho. No vocabulário do mercado, "harness" já nomeia o próprio agente de código (Claude Code, Codex, Cursor): a infraestrutura em volta do modelo que executa ferramentas, gerencia contexto e persiste estado. O harness do projeto não é isso — é o que faz *aquele* agente se comportar de um jeito específico **neste** repositório.
 
 ---
 

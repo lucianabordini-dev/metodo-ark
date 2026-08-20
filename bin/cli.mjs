@@ -98,11 +98,6 @@ function harness(raiz) {
   if (existsSync(claude)) c.skip("CLAUDE.md já existe — mantive o seu");
   else { cpSync(join(t, "CLAUDE-stub.md"), claude); c.ok("CLAUDE.md criado como stub"); }
 
-  console.log();
-  c.dim("Próximo passo: escrever a Fundação em .specs/memory/origem/fundacao.md");
-  c.dim("Antes disso, a pergunta que classifica a porta:");
-  c.dim("  consigo hoje conversar com quem vive essa dor, ou sou eu mesmo?");
-  c.dim("  sim → Extração (Fundação é o 1º doc) · não → Descoberta (antes vem o MVP Scope)");
 }
 
 function espelho(raiz, quieto = false) {
@@ -126,6 +121,50 @@ function espelho(raiz, quieto = false) {
   c.dim("e Developer Mode; sem isso o Git materializa o link como arquivo de texto");
   c.dim("e o agente lê uma linha achando que é a skill, sem dar erro.");
 }
+
+function proximo(modo, projeto = false) {
+  const b = (m) => `\x1b[1m${m}\x1b[0m`;
+  console.log();
+  if (modo === "global") {
+    c.dim("A skill está instalada e ativa sozinha quando a conversa entra no assunto.");
+    console.log();
+    console.log("  Para preparar um projeto, entre na pasta dele e rode:");
+    console.log(`    ${b("npx metodo-ark harness .")}`);
+    console.log();
+    c.dim('  Ou peça ao seu agente: "usando o Método Ark, prepara este projeto"');
+    return;
+  }
+  if (modo === "projeto") {
+    c.dim("A skill agora vive dentro do repositório — quem clonar recebe junto.");
+    console.log();
+    console.log("  Falta preparar a estrutura do método:");
+    console.log(`    ${b("npx metodo-ark harness .")}`);
+    return;
+  }
+  // modo === "harness" ou "init"
+  console.log(b("O harness do projeto está montado"));
+  c.dim("— a estrutura no repositório que dirige a execução da IA.");
+  console.log();
+  console.log("  .agents/     o que a IA sabe fazer aqui (skills e workflows)");
+  console.log("  .specs/      o que é verdade neste projeto, e o que ela precisa provar");
+  console.log("  AGENTS.md    as regras do seu código — hoje um esqueleto, você preenche com o tempo");
+  console.log();
+  console.log(`${b("Comece assim")} — abra seu agente de código e peça, com estas palavras:`);
+  console.log();
+  console.log(`  ${b('"usando o Método Ark, quero começar um produto novo"')}`);
+  console.log();
+  c.dim("Ele conduz a partir daí: faz as perguntas, e escreve com você o primeiro");
+  c.dim("documento do projeto. Você não precisa conhecer o método antes — só responder.");
+  console.log();
+  c.dim("Já tem um projeto em andamento? Peça no lugar:");
+  c.dim('  "usando o Método Ark, extrai o que já existe neste código"');
+  if (projeto) {
+    console.log();
+    c.dim("A skill está versionada em .agents/skills/ — quem clonar o repo recebe junto.");
+    c.dim("Acrescente .claude/ ao .gitignore: o espelho é local e não se commita.");
+  }
+}
+
 
 function ajuda() {
   console.log(`
@@ -169,8 +208,7 @@ switch (cmd) {
     } else {
       instalarGlobal(o.agente ? [o.agente] : Object.keys(GLOBAIS), o.force);
     }
-    console.log();
-    c.dim("Pronto. Peça ao agente: \"usando o Método Ark, monta o harness deste projeto\"");
+    proximo(o.projeto ? "projeto" : "global");
     break;
   }
   case "init": {
@@ -183,9 +221,10 @@ switch (cmd) {
     }
     console.log();
     harness(raiz);
+    proximo("init", o.projeto);
     break;
   }
-  case "harness": harness(resolve(o._[1] || ".")); break;
+  case "harness": harness(resolve(o._[1] || ".")); proximo("harness"); break;
   case "mirror": espelho(resolve(o._[1] || ".")); break;
   default: ajuda(); process.exit(1);
 }

@@ -1,10 +1,22 @@
-# O Harness
+# O harness do projeto
 ### A estrutura que transforma documentos em algo que a IA obedece
 *Método Ark · v3*
 
 ---
 
-O harness é o que separa "escrevi uma spec" de "o agente executa dentro do padrão". Ele vive no repositório, em arquivos versionados, em convenções abertas — nada de formato proprietário, nada preso a uma ferramenta.
+> **"Harness do projeto" — e por que a qualificação importa.** No vocabulário do mercado, *harness* é a infraestrutura em volta do modelo que o transforma em agente: execução de ferramentas, memória, estado, loops de feedback. Nesse sentido, **o harness é o Claude Code, o Codex, o Cursor** — a própria documentação do Claude Code se descreve assim.
+>
+> O que o Método Ark monta é outra camada, e por isso ela sempre leva sobrenome: **harness do projeto** (ou *harness Ark*). É a estrutura dentro do repositório que faz aquele harness genérico se comportar de um jeito específico aqui:
+>
+> - **o que a IA sabe fazer** (`.agents/skills/`)
+> - **o que é verdade neste projeto** (`.specs/memory/`)
+> - **o que ela precisa provar** (`.specs/rules/`, os gates, a validação)
+>
+> Nunca diga "o harness" sozinho: quem é técnico vai entender a ferramenta, não a estrutura.
+
+---
+
+O harness do projeto é o que separa "escrevi uma spec" de "o agente executa dentro do padrão". Ele vive no repositório, em arquivos versionados, em convenções abertas — nada de formato proprietário, nada preso a uma ferramenta.
 
 ```
 projeto/
@@ -126,7 +138,7 @@ Duas fontes de regra é como uma delas fica desatualizada em silêncio.
 
 ---
 
-## Ordem de montagem
+## Ordem de montagem do harness do projeto
 
 1. `.agents/skills/` e `.specs/` (as pastas vazias, versionadas com `.gitkeep`)
 2. `AGENTS.md` com a arquitetura em uma frase — mesmo que seja só isso no dia um
