@@ -131,6 +131,7 @@ function ajuda() {
   console.log(`
 \x1b[1mmetodo-ark\x1b[0m — construir software profissional com IA sem terceirizar o pensamento
 
+  npx metodo-ark init    [caminho]      instala a skill E monta o harness
   npx metodo-ark install [--agent <nome>] [--project] [--force]
   npx metodo-ark harness [caminho]      monta .specs/ e .agents/ no projeto
   npx metodo-ark mirror  [caminho]      espelha .agents/skills em .claude/skills
@@ -147,7 +148,11 @@ Instalação global (padrão) — vale em todos os seus projetos:
 Instalação por projeto — versionada, o time inteiro pega no git pull:
   npx metodo-ark install --project        .agents/skills/ + espelho .claude/skills
 
-Montar o harness:
+Do zero, num projeto novo — um comando só:
+  npx metodo-ark init .              instala global + monta o harness
+  npx metodo-ark init . --project    instala versionado no repo + monta o harness
+
+Montar só o harness (skill já instalada):
   npx metodo-ark harness .
 `);
 }
@@ -166,6 +171,18 @@ switch (cmd) {
     }
     console.log();
     c.dim("Pronto. Peça ao agente: \"usando o Método Ark, monta o harness deste projeto\"");
+    break;
+  }
+  case "init": {
+    const raiz = resolve(o._[1] || ".");
+    if (o.projeto) {
+      copiar(join(raiz, ".agents", "skills"), "Projeto (.agents/skills — versionado)", o.force);
+      espelho(raiz, true);
+    } else {
+      instalarGlobal(Object.keys(GLOBAIS), o.force);
+    }
+    console.log();
+    harness(raiz);
     break;
   }
   case "harness": harness(resolve(o._[1] || ".")); break;

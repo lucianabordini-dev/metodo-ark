@@ -19,6 +19,32 @@ O Método Ark resolve registrando a intenção **antes** — porque só dá para
 
 ---
 
+## Começar do zero
+
+Um comando: instala a skill e monta o harness no projeto.
+
+```bash
+npx metodo-ark init .
+```
+
+```
+✓ Claude Code / Desktop → ~/.claude/skills/metodo-ark
+✓ Codex CLI             → ~/.codex/skills/metodo-ark
+✓ Cursor                → ~/.cursor/skills/metodo-ark
+
+✓ harness montado em .specs
+✓ AGENTS.md criado (esqueleto)
+✓ CLAUDE.md criado como stub
+```
+
+Versionado no repositório, para o time inteiro pegar no `git pull`:
+
+```bash
+npx metodo-ark init . --project
+```
+
+---
+
 ## Instalação
 
 ```bash
