@@ -25,20 +25,36 @@ O Método Ark resolve registrando a intenção **antes** — porque só dá para
 npx metodo-ark install
 ```
 
-Instala em `~/.claude/skills/`. Outros alvos:
+Instala **globalmente nos três agentes** — vale em todos os seus projetos, sem repetir por repo:
+
+| Agente | Destino |
+|---|---|
+| Claude Code · Claude Desktop | `~/.claude/skills/metodo-ark/` |
+| Codex CLI | `~/.codex/skills/metodo-ark/` |
+| Cursor | `~/.cursor/skills/metodo-ark/` |
 
 ```bash
-npx metodo-ark install --agent codex      # ~/.codex/skills/
-npx metodo-ark install --agent cursor     # <projeto>/.cursor/skills/
-npx metodo-ark install --agent projeto    # <projeto>/.agents/skills/ — versionado, o time inteiro pega no git pull
-npx metodo-ark install --agent all        # claude + codex
+npx metodo-ark install --agent codex     # só um deles
+npx metodo-ark install --force           # atualiza para a versão nova
 ```
 
-Montar o harness num projeto:
+### Versionado no projeto
+
+Quando o método precisa viajar com o repositório — o time inteiro pega no `git pull`, e a versão fica travada junto com o código:
 
 ```bash
-npx metodo-ark harness .    # cria .specs/, .agents/, AGENTS.md e CLAUDE.md
-npx metodo-ark mirror .     # espelha .agents/skills em .claude/skills por symlink
+npx metodo-ark install --project
+```
+
+Instala em `.agents/skills/metodo-ark/` (convenção aberta, lida por Cursor e por qualquer agente compatível) e cria o espelho em `.claude/skills/` por symlink, para o `/metodo-ark` funcionar no Claude Code.
+
+**Escolha um dos dois e mantenha.** Global e por projeto funcionam juntos, mas quando a global for a 3.1 e a do projeto a 3.0, você não percebe pelo comportamento — percebe por uma regra que sumiu.
+
+### Montar o harness num projeto
+
+```bash
+npx metodo-ark harness .     # cria .specs/, .agents/, AGENTS.md e CLAUDE.md
+npx metodo-ark mirror .      # espelha .agents/skills em .claude/skills
 ```
 
 <details>
@@ -48,13 +64,6 @@ npx metodo-ark mirror .     # espelha .agents/skills em .claude/skills por symli
 git clone https://github.com/lucianabordini-dev/metodo-ark.git /tmp/ma
 cp -R /tmp/ma/skills/metodo-ark ~/.claude/skills/
 ```
-
-| Agente | Destino |
-|---|---|
-| Claude Code · Claude Desktop | `~/.claude/skills/metodo-ark/` |
-| Codex CLI | `~/.codex/skills/metodo-ark/` |
-| Cursor | `<projeto>/.cursor/skills/metodo-ark/` |
-| Projeto (qualquer agente) | `<projeto>/.agents/skills/metodo-ark/` |
 
 O erro mais comum é aninhar um nível a mais. O `SKILL.md` fica em `.../skills/metodo-ark/SKILL.md`.
 
